@@ -1,0 +1,3 @@
+{
+  "Hello!": "I am here so that ESM may crash when it imports me!"
+}

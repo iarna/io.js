@@ -21,3 +21,15 @@ rules:
 # Global scoped methods and vars
 globals:
   WebAssembly: false
+
+overrides:
+  - files: [ "es-module/test-*-esm-*.js" ]
+    parserOptions:
+      sourceType: module
+    rules:
+      required-modules: 0
+  - files: [ "es-module/test-*-legacy-*.js"]
+    parserOptions:
+      sourceType: script
+    rules:
+       required-modules: 0

@@ -1,0 +1,1 @@
+export {isMain} from 'nodejs';

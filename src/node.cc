@@ -184,6 +184,7 @@ static bool no_force_async_hooks_checks = false;
 static bool track_heap_objects = false;
 static const char* eval_string = nullptr;
 static std::vector<std::string> preload_modules;
+static std::vector<std::string> preload_es_modules;
 static const int v8_default_thread_pool_size = 4;
 static int v8_thread_pool_size = v8_default_thread_pool_size;
 static bool prof_process = false;
@@ -235,15 +236,9 @@ bool trace_warnings = false;
 // that is used by lib/module.js
 bool config_preserve_symlinks = false;
 
-// Set in node.cc by ParseArgs when --experimental-modules is used.
-// Used in node_config.cc to set a constant on process.binding('config')
-// that is used by lib/module.js
-bool config_experimental_modules = false;
-
-// Set in node.cc by ParseArgs when --loader is used.
-// Used in node_config.cc to set a constant on process.binding('config')
-// that is used by lib/internal/bootstrap_node.js
-std::string config_userland_loader;  // NOLINT(runtime/string)
+// Set in node.cc by ParseArgs when --mode= is used.
+// Used to specify the module type (esm or cjs) of the entry point.
+std::string config_module_mode;  // NOLINT(runtime/string)
 
 // Set by ParseArgs when --pending-deprecation or NODE_PENDING_DEPRECATION
 // is used.
@@ -3207,6 +3202,21 @@ void SetupProcessObject(Environment* env,
     preload_modules.clear();
   }
 
+  // -m, --module
+  if (!preload_es_modules.empty()) {
+    Local<Array> array = Array::New(env->isolate());
+    for (unsigned int i = 0; i < preload_es_modules.size(); ++i) {
+      Local<String> module = String::NewFromUtf8(env->isolate(),
+                                                 preload_es_modules[i].c_str());
+      array->Set(i, module);
+    }
+    READONLY_PROPERTY(process,
+                      "_preload_es_modules",
+                      array);
+
+    preload_es_modules.clear();
+  }
+
   // --no-deprecation
   if (no_deprecation) {
     READONLY_PROPERTY(process, "noDeprecation", True(env->isolate()));
@@ -3540,8 +3550,8 @@ static void PrintHelp() {
          "                             note: linked-in ICU data is present\n"
 #endif
          "  --preserve-symlinks        preserve symbolic links when resolving\n"
-         "  --experimental-modules     experimental ES Module support\n"
-         "                             and caching modules\n"
+         "  --mode esm|legacy          specify the kind of module the main\n"
+         "                             entry point is\n"
 #endif
          "\n"
          "Environment variables:\n"
@@ -3620,8 +3630,7 @@ static void CheckIfAllowedInEnv(const char* exe, bool is_env,
     "--no-warnings",
     "--napi-modules",
     "--expose-http2",   // keep as a non-op through v9.x
-    "--experimental-modules",
-    "--loader",
+    "--mode",
     "--trace-warnings",
     "--redirect-warnings",
     "--trace-sync-io",
@@ -3747,6 +3756,15 @@ static void ParseArgs(int* argc,
       }
       args_consumed += 1;
       preload_modules.push_back(module);
+    } else if (strcmp(arg, "--module") == 0 ||
+               strcmp(arg, "-m") == 0) {
+      const char* module = argv[index + 1];
+      if (module == nullptr) {
+        fprintf(stderr, "%s: %s requires an argument\n", argv[0], arg);
+        exit(9);
+      }
+      args_consumed += 1;
+      preload_es_modules.push_back(module);
     } else if (strcmp(arg, "--check") == 0 || strcmp(arg, "-c") == 0) {
       syntax_check_only = true;
     } else if (strcmp(arg, "--interactive") == 0 || strcmp(arg, "-i") == 0) {
@@ -3786,21 +3804,16 @@ static void ParseArgs(int* argc,
       Revert(cve);
     } else if (strcmp(arg, "--preserve-symlinks") == 0) {
       config_preserve_symlinks = true;
-    } else if (strcmp(arg, "--experimental-modules") == 0) {
-      config_experimental_modules = true;
-    }  else if (strcmp(arg, "--loader") == 0) {
-      const char* module = argv[index + 1];
-      if (!config_experimental_modules) {
-        fprintf(stderr, "%s: %s requires --experimental-modules be enabled\n",
-            argv[0], arg);
-        exit(9);
-      }
-      if (module == nullptr) {
+    } else if (strncmp(arg, "--mode=", 7) == 0) {
+      config_module_mode = arg + 7;
+    } else if (strcmp(arg, "--mode") == 0) {
+      const char* module_mode = argv[index + 1];
+      if (module_mode == nullptr) {
         fprintf(stderr, "%s: %s requires an argument\n", argv[0], arg);
         exit(9);
       }
       args_consumed += 1;
-      config_userland_loader = module;
+      config_module_mode = module_mode;
     } else if (strcmp(arg, "--prof-process") == 0) {
       prof_process = true;
       short_circuit = true;

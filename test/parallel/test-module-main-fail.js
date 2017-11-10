@@ -3,8 +3,8 @@ require('../common');
 const assert = require('assert');
 const { execFileSync } = require('child_process');
 
-const entryPoints = ['iDoNotExist', 'iDoNotExist.js', 'iDoNotExist.mjs'];
-const flags = [[], ['--experimental-modules']];
+const entryPoints = ['iDoNotExist', 'iDoNotExist.js'];
+const flags = [[], []];
 const node = process.argv[0];
 
 for (const args of flags) {

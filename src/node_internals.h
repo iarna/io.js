@@ -166,15 +166,9 @@ extern std::string openssl_config;
 // that is used by lib/module.js
 extern bool config_preserve_symlinks;
 
-// Set in node.cc by ParseArgs when --experimental-modules is used.
-// Used in node_config.cc to set a constant on process.binding('config')
-// that is used by lib/module.js
-extern bool config_experimental_modules;
-
-// Set in node.cc by ParseArgs when --loader is used.
-// Used in node_config.cc to set a constant on process.binding('config')
-// that is used by lib/internal/bootstrap_node.js
-extern std::string config_userland_loader;
+// Set in node.cc by ParseArgs when --mode= is used.
+// Used to specify the module type (esm or cjs) of the entry point.
+extern std::string config_module_mode;
 
 // Set in node.cc by ParseArgs when --expose-internals or --expose_internals is
 // used.

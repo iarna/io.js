@@ -12,11 +12,6 @@ parser: babel-eslint
 parserOptions:
   sourceType: script
 
-overrides:
-  - files: ["doc/api/esm.md", "*.mjs", "test/es-module/test-esm-example-loader.js"]
-    parserOptions:
-      sourceType: module
-
 rules:
   # Possible Errors
   # http://eslint.org/docs/rules/#possible-errors
@@ -209,3 +204,8 @@ globals:
   LTTNG_NET_SERVER_CONNECTION: false
   LTTNG_NET_STREAM_END: false
   internalBinding: false
+
+overrides:
+  - files: [ "esm.md" ]
+    parserOptions:
+      sourceType: module
