@@ -632,6 +632,16 @@ An operation outside the bounds of a `Buffer` was attempted.
 An attempt has been made to create a `Buffer` larger than the maximum allowed
 size.
 
+<a id="ERR_CANNOT_IMPORT_LEGACY_MODULE"></a>
+### ERR_CANNOT_IMPORT_LEGACY_MODULE
+
+An attempt has been made to `import` a Common JS module (e.g., one containing `require` without `import`ing it).
+
+<a id="ERR_CANNOT_REQUIRE_ESM"></a>
+### ERR_CANNOT_REQUIRE_ESM
+
+An attempt has been made to `require()` an ECMAScript module (e.g., one containing `import` and/or `export` statements).
+
 <a id="ERR_CANNOT_WATCH_SIGINT"></a>
 ### ERR_CANNOT_WATCH_SIGINT
 
