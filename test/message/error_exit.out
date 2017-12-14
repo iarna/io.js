@@ -11,5 +11,6 @@ AssertionError [ERR_ASSERTION]: 1 strictEqual 2
     at tryModuleLoad (module.js:*:*)
     at Function.Module._load (module.js:*:*)
     at Function.Module.runMain (module.js:*:*)
+    at preloadModules (bootstrap_node.js:*:*)
+    at preloadModules (bootstrap_node.js:*:*)
     at startup (bootstrap_node.js:*:*)
-    at bootstrap_node.js:*:*
