@@ -2,6 +2,10 @@ lib/internal/v8.js
 lib/internal/v8_prof_polyfill.js
 lib/punycode.js
 test/addons/??_*
+test/es-module/test-13-esm-dynamic-import.js
+test/es-module/test-19-esm-nodejs-import-exposes-loader.js
+test/es-module/test-20-esm-transpilation-hook.js
+test/es-module/test-21-cjs-dynamic-import.js
 test/es-module/test-esm-dynamic-import.js
 test/fixtures
 test/message/esm_display_syntax_error.mjs
