@@ -31,23 +31,25 @@ dedupe.usage = usage(
 
 function dedupe (args, cb) {
   validate('AF', arguments)
-  // the /path/to/node_modules/..
-  var where = path.resolve(npm.dir, '..')
-  var dryrun = false
-  if (npm.command.match(/^find/)) dryrun = true
-  if (npm.config.get('dry-run')) dryrun = true
-  if (dryrun && !npm.config.get('json')) npm.config.set('parseable', true)
+  const opts = {}
+  if (npm.command.match(/^find/)) opts.dryrun = true
+  if (npm.config.get('dry-run')) opts.dryrun = true
+  if (opts.dryrun && !npm.config.get('json')) opts.parseable = true
 
-  new Deduper(where, dryrun).run(cb)
+  new Deduper(opts).run(cb)
 }
 
-function Deduper (where, dryrun) {
+function Deduper (opts) {
   validate('SB', arguments)
-  Installer.call(this, where, dryrun, [])
+  Installer.call(this, [], opts)
   this.noPackageJsonOk = true
   this.topLevelLifecycles = false
 }
 util.inherits(Deduper, Installer)
+
+Deduper.prototype.reportArgsInstalled = function () {
+  return ''
+}
 
 Deduper.prototype.loadIdealTree = function (cb) {
   validate('F', arguments)

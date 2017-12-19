@@ -15,7 +15,8 @@ var shorthands = {
   't': 'test',
   'ddp': 'dedupe',
   'v': 'view',
-  'run': 'run-script'
+  'run': 'run-script',
+  'a': 'asset'
 }
 
 var affordances = {
@@ -58,6 +59,7 @@ var cmdList = [
   'prune',
   'pack',
   'dedupe',
+  'asset',
 
   'rebuild',
   'link',
