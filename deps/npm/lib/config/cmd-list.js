@@ -1,22 +1,6 @@
 // short names for common things
 var shorthands = {
-  'un': 'uninstall',
-  'rb': 'rebuild',
-  'list': 'ls',
-  'ln': 'link',
-  'i': 'install',
-  'it': 'install-test',
-  'up': 'update',
-  'c': 'config',
-  's': 'search',
-  'se': 'search',
-  'unstar': 'star', // same function
-  'tst': 'test',
-  't': 'test',
-  'ddp': 'dedupe',
-  'v': 'view',
-  'run': 'run-script',
-  'a': 'asset'
+  'unstar': 'star' // same function
 }
 
 var affordances = {
@@ -42,7 +26,24 @@ var affordances = {
   'remove': 'uninstall',
   'rm': 'uninstall',
   'r': 'uninstall',
-  'rum': 'run-script'
+  'rum': 'run-script',
+
+  'a': 'asset',
+  'un': 'uninstall',
+  'rb': 'rebuild',
+  'list': 'ls',
+  'ln': 'link',
+  'i': 'install',
+  'it': 'install-test',
+  'up': 'update',
+  'c': 'config',
+  's': 'search',
+  'se': 'search',
+  'tst': 'test',
+  't': 'test',
+  'ddp': 'dedupe',
+  'v': 'view',
+  'run': 'run-script',
 }
 
 // these are filenames in .
